@@ -158,15 +158,35 @@ export default {
         const content = this.$refs.content
         content.innerHTML = this.content
         content.addEventListener('mouseup', this.saveCurrentRange, false)
-        content.addEventListener('keyup', () => {
+
+        // 键盘事件
+        this.keyupHandler = () => {
             this.$emit('change', content.innerHTML)
             this.saveCurrentRange()
-        }, false)
-        content.addEventListener('mouseout', (e) => {
+        }
+
+        content.addEventListener('keyup', this.keyupHandler, false)
+
+        // 移出事件
+        this.mouseoutHandler = (e) => {
             if (e.target === content) {
                 this.saveCurrentRange()
             }
-        }, false)
+        }
+
+        content.addEventListener('mouseout', this.mouseoutHandler, false)
+
+        // 粘贴事件
+        this.pasteHandler = () => {
+            setTimeout(() => {
+                this.$emit('change', content.innerHTML)
+                this.saveCurrentRange()
+            },0)
+        }
+
+        content.addEventListener('paste', this.pasteHandler , false)
+
+        // 移动端触摸事件
         this.touchHandler = (e) => {
             if (content.contains(e.target)) {
                 this.saveCurrentRange()
@@ -182,7 +202,12 @@ export default {
         }
     },
     beforeDestroy(){
+        const content = this.$refs.content
         window.removeEventListener('touchend', this.touchHandler)
+        content.removeEventListener('paste', this.pasteHandler)
+        content.removeEventListener('mouseout', this.mouseoutHandler)
+        content.removeEventListener('keyup', this.keyupHandler)
+        content.removeEventListener('mouseup', this.saveCurrentRange)
         this.modules.forEach((module) => {
             if (typeof module.destroyed === 'function') {
                 module.destroyed(this)

@@ -1,5 +1,8 @@
 # 简介 Intro 
 
+这是一个基于PeakTai/vue-html5-editor v1.1.1 folk的版本，增加了鼠标右键粘贴文本触发change事件。
+以下描述均为原作者编辑的内容:
+
 Vue-html5-editor是一个Vue的富文本编辑器插件，简洁灵活可扩展，适用于vue2.0以上版本，支持IE11.
 
 Vue-html5-editor is an html5 wysiwyg editor for vue,easy and flexible,compatible with Vue.js 2.0+,support IE11.
